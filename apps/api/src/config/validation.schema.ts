@@ -29,6 +29,7 @@ export const validationSchema = Joi.object({
   MINIO_ACCESS_KEY: Joi.string().required(),
   MINIO_SECRET_KEY: Joi.string().required(),
   MINIO_BUCKET: Joi.string().default('vivid-studios'),
+  MINIO_REGION: Joi.string().default('us-east-1'),
 
   // Redis
   REDIS_HOST: Joi.string().default('localhost'),

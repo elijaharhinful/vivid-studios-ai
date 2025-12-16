@@ -17,6 +17,7 @@ export class MinioService {
       useSSL: this.configService.getOrThrow<boolean>('minio.useSSL'),
       accessKey: this.configService.getOrThrow<string>('minio.accessKey'),
       secretKey: this.configService.getOrThrow<string>('minio.secretKey'),
+      region: this.configService.get<string>('minio.region'),
     });
 
     this.defaultBucket = this.configService.getOrThrow<string>('minio.bucket');
