@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "preserve",
-
+    "baseUrl": ".",
     "strict": true,
     "noEmit": true,
     "emitDeclarationOnly": false,
@@ -18,7 +18,8 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@vivid-studios-ai/shared-types": ["../../libs/shared-types/src/index.ts"]
     }
   },
   "include": [
