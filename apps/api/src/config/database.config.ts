@@ -15,6 +15,10 @@ export default registerAs('database', () => ({
   ssl:
     process.env.DATABASE_SSL === 'true' ||
     process.env.NODE_ENV === 'production'
-      ? { rejectUnauthorized: false }
+      ? {
+          rejectUnauthorized: false,
+          // Ensure SSL is required
+          require: true,
+        }
       : false,
 }));
