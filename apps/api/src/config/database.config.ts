@@ -17,8 +17,6 @@ export default registerAs('database', () => ({
     process.env.NODE_ENV === 'production'
       ? {
           rejectUnauthorized: false,
-          // Ensure SSL is required
-          require: true,
         }
       : false,
 }));
