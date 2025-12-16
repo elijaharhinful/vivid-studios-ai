@@ -90,6 +90,7 @@ import {
         ],
         synchronize: configService.get('database.synchronize'),
         logging: configService.get('database.logging'),
+        ssl: configService.get('database.ssl'),
         autoLoadEntities: true,
       }),
     }),
