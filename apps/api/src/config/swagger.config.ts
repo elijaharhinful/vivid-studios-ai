@@ -4,9 +4,7 @@ import { INestApplication } from '@nestjs/common';
 export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
     .setTitle('Vivid Studios AI API')
-    .setDescription(
-      'API documentation for Vivid Studios AI - AI-powered character image generation platform'
-    )
+    .setDescription('API documentation for Vivid Studios AI')
     .setVersion('1.0')
     .addTag('auth', 'Authentication endpoints')
     .addTag('users', 'User management')

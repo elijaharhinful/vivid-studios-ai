@@ -1,6 +1,8 @@
 @import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
 
 @theme {
+  /* Primary colors (cyan/blue) */
   --color-primary-50: #f0f9ff;
   --color-primary-100: #e0f2fe;
   --color-primary-200: #bae6fd;
@@ -13,15 +15,41 @@
   --color-primary-900: #0c4a6e;
 }
 
-
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   body {
     background-color: rgb(249 250 251);
     color: rgb(17 24 39);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Dark mode styles */
+  .dark body {
+    background-color: rgb(0 0 0);
+    color: rgb(255 255 255);
+  }
+
+  /* Custom scrollbar for dark mode */
+  .dark ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    background: rgb(17 24 39);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgb(55 65 81);
+    border-radius: 5px;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgb(75 85 99);
   }
 }
 
@@ -57,6 +85,17 @@
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     padding: 1.5rem;
+  }
+
+  /* Auth page specific styles */
+  .auth-gradient-bg {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  }
+
+  .glass-card {
+    background: rgba(17, 24, 39, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(55, 65, 81, 0.5);
   }
 }
 

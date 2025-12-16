@@ -1,5 +1,5 @@
-import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { Logger, ClassSerializerInterceptor } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app/app.module';
@@ -46,7 +46,8 @@ async function bootstrap() {
   // Global interceptors
   app.useGlobalInterceptors(
     new LoggingInterceptor(),
-    new TransformInterceptor()
+    new TransformInterceptor(),
+    new ClassSerializerInterceptor(app.get(Reflector))
   );
 
   // Swagger documentation

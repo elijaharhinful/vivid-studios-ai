@@ -53,7 +53,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @GoogleAuthDocs()
   async googleAuth(@Body() googleAuthDto: GoogleAuthDto): Promise<IAuthTokens> {
-    return this.authService.googleAuth(googleAuthDto.id_token);
+    return this.authService.googleAuth(googleAuthDto);
   }
 
   @Post('refresh')

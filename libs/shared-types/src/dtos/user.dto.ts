@@ -60,6 +60,15 @@ export class RequestPasswordResetDto {
 }
 
 export class GoogleAuthDto {
+  @IsOptional()
   @IsString()
-  id_token!: string;
+  id_token?: string;
+
+  @IsOptional()
+  @IsString()
+  code?: string;
+
+  @IsOptional()
+  @IsString()
+  redirect_uri?: string;
 }

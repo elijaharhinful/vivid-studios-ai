@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   Column,
@@ -25,12 +26,14 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   username!: string;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 255, nullable: true })
   password_hash?: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   oauth_provider?: string;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 255, nullable: true })
   oauth_provider_id?: string;
 
@@ -46,9 +49,11 @@ export class User extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   credits!: number;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 255, nullable: true })
   reset_token?: string | null;
 
+  @Exclude()
   @Column({ type: 'timestamp', nullable: true })
   reset_token_expires_at?: Date | null;
 

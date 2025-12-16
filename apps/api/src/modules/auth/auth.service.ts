@@ -15,6 +15,7 @@ import {
   CreateUserDto,
   RequestPasswordResetDto,
   ResetPasswordDto,
+  GoogleAuthDto,
   IAuthTokens,
   IJwtPayload,
   SYSTEM_MESSAGES,
@@ -209,19 +210,49 @@ export class AuthService {
     return this.userRepository.save(newUser);
   }
 
-  async googleAuth(idToken: string): Promise<IAuthTokens> {
+  async googleAuth(dto: GoogleAuthDto): Promise<IAuthTokens> {
     const { OAuth2Client } = await import('google-auth-library');
     const client = new OAuth2Client(
-      this.configService.getOrThrow<string>('google.clientId')
+      this.configService.getOrThrow<string>('google.clientId'),
+      this.configService.get<string>('google.clientSecret')
     );
 
     try {
-      const ticket = await client.verifyIdToken({
-        idToken,
-        audience: this.configService.getOrThrow<string>('google.clientId'),
-      });
+      let payload;
 
-      const payload = ticket.getPayload();
+      if (dto.code) {
+         // Authorization Code Flow
+         const clientSecret = this.configService.get<string>('google.clientSecret');
+         if (!clientSecret) {
+            console.error('Missing GOOGLE_CLIENT_SECRET. Cannot exchange code.');
+            // Fallback: If we can't exchange code, we can't authenticate.
+            throw new UnauthorizedException('Server configuration error: Missing Google Client Secret');
+         }
+
+         const { tokens } = await client.getToken({
+            code: dto.code,
+            redirect_uri: dto.redirect_uri || 'http://localhost:3000/auth/callback', // Default to frontend standard
+         });
+
+         if (!tokens.id_token) {
+             throw new UnauthorizedException('Google did not return an ID Token');
+         }
+
+         const ticket = await client.verifyIdToken({
+             idToken: tokens.id_token,
+             audience: this.configService.getOrThrow<string>('google.clientId'),
+         });
+         payload = ticket.getPayload();
+      } else if (dto.id_token) {
+         // Implicit/Credential Flow
+         const ticket = await client.verifyIdToken({
+            idToken: dto.id_token,
+            audience: this.configService.getOrThrow<string>('google.clientId'),
+         });
+         payload = ticket.getPayload();
+      } else {
+         throw new BadRequestException('Either code or id_token must be provided');
+      }
 
       if (!payload || !payload.email) {
         throw new UnauthorizedException(SYSTEM_MESSAGES.AUTH.ERROR.INVALID_GOOGLE_TOKEN);
@@ -237,6 +268,7 @@ export class AuthService {
 
       return this.generateTokens(user);
     } catch (error) {
+      console.error('Google Auth Error:', error);
       throw new UnauthorizedException(SYSTEM_MESSAGES.AUTH.ERROR.GOOGLE_AUTH_FAILED);
     }
   }

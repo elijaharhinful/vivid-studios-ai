@@ -21,7 +21,8 @@
       "options": {
         "buildTarget": "api:build",
         "runtimeArgs": ["--enable-source-maps"],
-        "watch": true
+        "watch": true,
+        "inspect": false
       }
     }
   },
