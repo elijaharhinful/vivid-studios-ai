@@ -78,6 +78,12 @@ export class MinioService {
   }
 
   async ensureBucket(bucket: string): Promise<void> {
+    const skipCreation = this.configService.get('minio.skipBucketCreation') === 'true';
+    if (skipCreation) {
+      this.logger.log(`Skipping bucket creation for: ${bucket}`);
+      return;
+    }
+
     try {
       const exists = await this.minioClient.bucketExists(bucket);
       if (!exists) {
@@ -103,8 +109,12 @@ export class MinioService {
         );
       }
     } catch (error) {
-      this.logger.error(`Failed to ensure bucket: ${bucket}`, error);
-      throw error;
+      // In production with external S3 providers (like Supabase/R2), 
+      // we might not have permissions to check/create buckets.
+      // Log warning but don't crash.
+      this.logger.warn(
+        `Failed to ensure bucket: ${bucket}. This is expected if using an external S3 provider with restricted permissions. Error: ${(error as any).message}`
+      );
     }
   }
 

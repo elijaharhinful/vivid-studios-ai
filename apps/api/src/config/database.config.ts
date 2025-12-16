@@ -12,4 +12,9 @@ export default registerAs('database', () => ({
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/migrations/*.js'],
   migrationsRun: false,
+  ssl:
+    process.env.DATABASE_SSL === 'true' ||
+    process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
 }));
